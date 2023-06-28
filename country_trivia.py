@@ -2,6 +2,7 @@ import requests
 import pandas as pd 
 import sqlalchemy as db 
 
+
 #--define functions--
 def display_rules():
     print("")
@@ -9,6 +10,7 @@ def display_rules():
     print("")
     print("Input a country below to be quizzed")
     print("You will be asked a series of questions about your selected country")
+    print("You will have 15 seconds to answer each question")
     print("Answer all questions correctly to win!")
 
 def select_country():
@@ -48,22 +50,25 @@ def quiz(name, database):
     incorrect = 0
     print("")
     capital_input=input(f"QUESTION 1: What is the capital of {name}? ")
+    
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT capital FROM country_info;")).fetchall()
-        correct_captial = query_result[0][0]
-        if capital_input.lower().strip() == correct_captial.lower():
+        correct_capital = query_result[0][0]
+        
+        if capital_input.lower().strip() == correct_capital.lower():
             print("Correct!")
             correct += 1
         else:
             print("Incorrect! The correct answer was: ")
-            print(correct_captial)
-
+            print(correct_capital)
             incorrect += 1
     print("")
+
     currency_input=input(f"QUESTION 2: What is the currency of {name}? ")
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT currency FROM country_info;")).fetchall()
         correct_currency = query_result[0][0]
+        
         if currency_input.lower().strip() == correct_currency.lower():
             print("Correct!")
             correct += 1
@@ -71,11 +76,13 @@ def quiz(name, database):
             print("Incorrect! The correct answer was: ")
             print(correct_currency)
             incorrect += 1
-    print("")    
+    print("")  
+
     region_input=input(f"QUESTION 3: In what region is {name} located at? ")
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT region FROM country_info;")).fetchall()
         correct_region = query_result[0][0]
+        
         if region_input.lower().strip() == correct_region.lower():
             print("Correct!")
             correct += 1
@@ -88,7 +95,7 @@ def quiz(name, database):
     if correct>=2:
         print("Well done!!!")
     else:
-        print("Dont worry, you will get it next time!")
+        print("Dont worry, you will do better next time!")
     print("")
     print(f"Here is the information about {name}:")
     with engine.connect() as connection:
