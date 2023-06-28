@@ -4,7 +4,9 @@ import sqlalchemy as db
 
 #--define functions--
 def display_rules():
+    print("")
     print("==COUNTRY TRIVIA==")
+    print("")
     print("Input a country below to be quizzed")
     print("You will be asked a series of questions about your selected country")
     print("Answer all questions correctly to win!")
@@ -13,6 +15,7 @@ def select_country():
     #user selects country
     #if country not found ask again
     #else make database and return the country name and database 
+    print("")
     name = input("Choose a country to be quizzed on: ")
     name.lower().strip()
 
@@ -27,25 +30,71 @@ def select_country():
         response_data = response.json()
 
     country = response_data[0]
-    currency = country["currencies"]
-    for key in currency:
-        if 'name' in currency[key]:
-            currency = currency[key]['name']
+    currencies = country["currencies"]
+    for key in currencies:
+        if 'name' in currencies[key]:
+            currency = currencies[key]['name']
     capital = country["capital"][0]
     region = country["region"]
 
     country_data = pd.DataFrame.from_dict({"currency":[currency],"capital":[capital],"region":[region]})
     return [name,country_data]
 
-def quiz(database):
+def quiz(name, database):
     engine = db.create_engine('sqlite:///country_db.db')
     database.to_sql('country_info', con=engine, if_exists='replace', index=False)
+  
+    correct = 0
+    incorrect = 0
+    print("")
+    capital_input=input(f"QUESTION 1: What is the capital of {name}? ")
+    with engine.connect() as connection:
+        query_result = connection.execute(db.text("SELECT capital FROM country_info;")).fetchall()
+        correct_captial = query_result[0][0]
+        if capital_input.lower().strip() == correct_captial.lower():
+            print("Correct!")
+            correct += 1
+        else:
+            print("Incorrect! The correct answer was: ")
+            print(correct_captial)
 
+            incorrect += 1
+    print("")
+    currency_input=input(f"QUESTION 2: What is the currency of {name}? ")
+    with engine.connect() as connection:
+        query_result = connection.execute(db.text("SELECT currency FROM country_info;")).fetchall()
+        correct_currency = query_result[0][0]
+        if currency_input.lower().strip() == correct_currency.lower():
+            print("Correct!")
+            correct += 1
+        else:
+            print("Incorrect! The correct answer was: ")
+            print(correct_currency)
+            incorrect += 1
+    print("")    
+    region_input=input(f"QUESTION 3: In what region is {name} located at? ")
+    with engine.connect() as connection:
+        query_result = connection.execute(db.text("SELECT region FROM country_info;")).fetchall()
+        correct_region = query_result[0][0]
+        if region_input.lower().strip() == correct_region.lower():
+            print("Correct!")
+            correct += 1
+        else:
+            print("Incorrect! The correct answer was: ")
+            print(correct_region)
+            incorrect += 1
+    print("")  
+    print(f"Answered {correct} questions correctly and {incorrect} questions incorrectly")
+    if correct>=2:
+        print("Well done!!!")
+    else:
+        print("Dont worry, you will get it next time!")
+    print("")
+    print(f"Here is the information about {name}:")
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT * FROM country_info;")).fetchall()
-        print(pd.DataFrame(query_result))
-    
-    #ask three questions and count score
+        print(pd.DataFrame(query_result))   
+        
 
 def game():
     #--this is where everything goes-- 
@@ -60,5 +109,17 @@ def game():
 
 
 #--game start stuff here--
-game()
+play_again = True
+while play_again: 
+    game()
+    print("")
+    play_again = input("GAME OVER! Would you like to try again?(yes/no) ")
+    while play_again.lower() != 'yes' and play_again.lower() != 'no':
+        play_again = input("GAME OVER! Would you like to try again?(yes/no) ")
+    if play_again == 'yes':
+        play_again = True
+    else:
+        play_again = False
+print("")
+print("Thanks for playing!")
 
