@@ -18,11 +18,11 @@ jobs:
           pip install coverage
 
       - name: Test with unittest
-        run: python3 -m unittest country_trivia.py
+        run: python3 -m unittest unit_tests.py
 
       - name: Check code coverage
         run: |
-          python3 -m coverage run -m unittest country_trivia.py
+          python3 -m coverage run -m unittest unit_tests.py
           python3 -m coverage report
           python3 -m coverage html
 
