@@ -13,13 +13,17 @@ def display_rules():
     print("You will have 15 seconds to answer each question")
     print("Answer all questions correctly to win!")
 
+def get_input():
+    print("")
+    name = input("Choose a country to be quizzed on: ")
+    name.lower().strip()
+    return name
+
 def select_country():
     #user selects country
     #if country not found ask again
     #else make database and return the country name and database 
-    print("")
-    name = input("Choose a country to be quizzed on: ")
-    name.lower().strip()
+    name = get_input()
 
     response = requests.get(f'https://restcountries.com/v3.1/name/{name}?fields=capital,currencies,region')
     response_data = response.json() 
@@ -40,7 +44,7 @@ def select_country():
     region = country["region"]
 
     country_data = pd.DataFrame.from_dict({"currency":[currency],"capital":[capital],"region":[region]})
-    return [name,country_data]
+    return [name, country_data]
 
 def quiz(name, database):
     engine = db.create_engine('sqlite:///country_db.db')
