@@ -8,7 +8,6 @@ def display_rules():
     print("==COUNTRY TRIVIA==")
     print("")
     print("Input a country below to be quizzed")
-    print("You will be asked a series of questions about your selected country")
     print("You will have 15 seconds to answer each question")
     print("Answer all questions correctly to win!")
 
@@ -48,40 +47,40 @@ def select_country():
 def quiz(name, database):
     engine = db.create_engine('sqlite:///country_db.db')
     database.to_sql('country_info', con=engine, if_exists='replace', index=False)
-  
+
     correct = 0
     incorrect = 0
     print("")
-    capital_input=input(f"QUESTION 1: What is the capital of {name}? ")
-    
+    capital_input = input(f"QUESTION 1: What is the capital of {name}? ")
+
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT capital FROM country_info;")).fetchall()
         correct_capital = query_result[0][0]
-        
+
         if capital_input.lower().strip() == correct_capital.lower():
             print("Correct!")
             correct += 1
         elif capital_input.lower().strip() in correct_capital.lower():
-                print("Close! The full answer was: ")
-                print(correct_capital) 
-                correct += 1
+            print("Close! The full answer was: ")
+            print(correct_capital)
+            correct += 1
         else:
             print("Incorrect! The correct answer was: ")
             print(correct_capital)
             incorrect += 1
     print("")
 
-    currency_input=input(f"QUESTION 2: What is the currency of {name}? ")
+    currency_input = input(f"QUESTION 2: What is the currency of {name}? ")
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT currency FROM country_info;")).fetchall()
         correct_currency = query_result[0][0]
-        
+
         if currency_input.lower().strip() == correct_currency.lower():
             print("Correct!")
             correct += 1
         elif currency_input.lower().strip() in correct_currency.lower():
             print("Close! The full answer was: ")
-            print(correct_currency) 
+            print(correct_currency)
             correct += 1
         else:
             print("Incorrect! The correct answer was: ")
