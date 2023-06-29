@@ -10,7 +10,7 @@ def display_rules():
     print("==COUNTRY TRIVIA==")
     print("")
     print("Input a country below to be quizzed")
-    print("You will have 15 seconds to answer each question")
+    print("You will be asked a series of questions about the selected country")
     print("Answer all questions correctly to win!")
 
 
