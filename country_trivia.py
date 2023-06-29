@@ -88,7 +88,7 @@ def quiz(name, database):
             incorrect += 1
     print("")  
 
-    region_input=input(f"QUESTION 3: In what region is {name} located at? ")
+    region_input=input(f"QUESTION 3: On what continent is {name} located? ")
     with engine.connect() as connection:
         query_result = connection.execute(db.text("SELECT region FROM country_info;")).fetchall()
         correct_region = query_result[0][0]
