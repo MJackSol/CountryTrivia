@@ -1,12 +1,9 @@
-import requests
 import pandas as pd 
 import unittest
 from unittest.mock import patch
 from unittest import TestCase
 from country_trivia import select_country
 
-#ok. so.
-#step one create test class
 class Test(TestCase):
     
     @patch('country_trivia.get_input', return_value='japan')

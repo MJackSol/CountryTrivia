@@ -2,7 +2,6 @@ import requests
 import pandas as pd 
 import sqlalchemy as db 
 
-
 #--define functions--
 def display_rules():
     print("")
@@ -62,6 +61,10 @@ def quiz(name, database):
         if capital_input.lower().strip() == correct_capital.lower():
             print("Correct!")
             correct += 1
+        elif capital_input.lower().strip() in correct_capital.lower():
+                print("Close! The full answer was: ")
+                print(correct_capital) 
+                correct += 1
         else:
             print("Incorrect! The correct answer was: ")
             print(correct_capital)
@@ -75,6 +78,10 @@ def quiz(name, database):
         
         if currency_input.lower().strip() == correct_currency.lower():
             print("Correct!")
+            correct += 1
+        elif currency_input.lower().strip() in correct_currency.lower():
+            print("Close! The full answer was: ")
+            print(correct_currency) 
             correct += 1
         else:
             print("Incorrect! The correct answer was: ")
